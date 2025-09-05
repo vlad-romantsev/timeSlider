@@ -1,0 +1,9 @@
+@use "./variables.scss" as *;
+
+@mixin description-base {
+  color: $text-color;
+  font-family: "PT Sans", sans-serif;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: normal;
+}

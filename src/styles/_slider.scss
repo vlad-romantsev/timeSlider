@@ -1,0 +1,15 @@
+@use "./variables.scss" as *;
+
+.time-slider {
+    display: flex;
+    flex-direction: column;
+    width: 1440px;
+    margin: 0 160px 0 322px;  
+  }
+  
+  .time-slider-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding-bottom: 56px;
+  }

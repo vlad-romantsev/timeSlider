@@ -1,0 +1,51 @@
+@use "./variables.scss" as *;
+@use "./segment";
+
+.time-circle {
+    position: relative;
+    top: 38px;
+    left: 19px;
+    width: 530px;
+    height: 536px;
+    border-radius: 50%;
+    padding-bottom: 84px;
+    
+    .circle-line {
+      position: absolute;
+      width: 530px;
+      height: 536px;
+      border-radius: 50% / 50%;
+      border: 1px solid rgba(66, 86, 122, 0.5);
+      margin-bottom: 80px;
+      z-index: 1;
+    }
+    .circle-years {
+      position: absolute;
+      top: 260px;
+      left: 265px;
+      transform: translate(-50%, -50%);
+      width: 973px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'PT Sans', sans-serif;
+      font-size: 200px;
+      font-weight: 700;
+      color: $text-color;
+      line-height: 1.6;
+      .year-left,
+      .year-right {
+        white-space: nowrap;
+      }
+      .year-left{
+        color: $start-year-color;
+        text-align: left;
+      }
+      .year-right{
+        color: $end-year-color; 
+        text-align: right;
+      }
+  
+    }
+  }

@@ -1,0 +1,44 @@
+@use "../../styles/variables.scss" as *;
+@use "../../styles/mixins.scss" as *;
+@use "../../styles/navigation" as *;
+
+.event-slider-container {
+  width: 1200px;
+  position: relative;
+  background-color: $background-color;
+  padding-left: 80px;
+
+  .swiper {
+    padding: 0;
+  }
+
+  .swiper-slide {
+    max-width: 300px;
+    height: 135px;
+  }
+
+  .event-card {
+    .description {
+      @include description-base;
+      font-size: 20px;
+      margin-top: 15px;
+    }
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .year {
+    font-family: "Bebas Neue", sans-serif;
+    color: $year-text-color;
+    font-size: 25px;
+  }
+
+  .description {
+    @include description-base;
+    font-size: 20px; 
+  }
+}
+

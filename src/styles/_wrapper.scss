@@ -1,0 +1,75 @@
+@use "./variables.scss" as *;
+
+.time-slider-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    display: flex;
+    justify-content: center;
+    background-color: $background-color;
+    padding-top: 177px;
+    padding-bottom: 104px;
+    z-index: 0;
+  
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: rgba(66, 86, 122, 0.1);
+      z-index: 1;
+      background-size: 100% 16px;
+      background-image: repeating-linear-gradient(
+        to top,
+        rgba(66, 86, 122, 0.1),
+        rgba(66, 86, 122, 0.1) 1px,
+        transparent 1px,
+        transparent 16px
+      );
+    }
+  
+    &::before {
+      left: 320px; 
+    }
+  
+    &::after {
+      right: 160px;
+    }
+    .axis-y {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 1040px;
+      transform: translateX(-50%);
+      width: 1px;
+      background-color: rgba(66, 86, 122, 0.1);
+      background-image: repeating-linear-gradient(
+        to top,
+        rgba(66, 86, 122, 0.1),
+        rgba(66, 86, 122, 0.1) 1px,
+        transparent 1px,
+        transparent 16px
+      );
+      background-size: 100% 16px;
+      z-index: 1;
+    }
+    
+    .horizontal-line {
+      position: absolute;
+      left: 320px;
+      right: 160px;
+      top: 480px;
+      height: 1px;
+      background-color: rgba(66, 86, 122, 0.1);
+      background-image: repeating-linear-gradient(
+        to right,
+        rgba(66, 86, 122, 0.1),
+        rgba(66, 86, 122, 0.1) 1px,
+        transparent 1px,
+        transparent 16px
+      );
+      background-size: 16px 100%;
+    }
+  }

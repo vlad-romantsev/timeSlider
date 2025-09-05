@@ -1,0 +1,33 @@
+.custom-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  appearance: none;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+
+  &.prev {
+    left: 20px;
+  }
+
+  &.next {
+    right: -120px;
+  }
+
+  &.swiper-button-disabled {
+    display: none;
+  }
+}

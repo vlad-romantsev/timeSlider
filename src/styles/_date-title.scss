@@ -1,0 +1,41 @@
+@use "./variables.scss" as *;
+
+.date-with-buttons-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 615px;
+    width: 431px;
+  }
+
+.historical-date-title {
+    position: relative;
+    height: 120px;
+    width: 100%;
+    border-left: 5px solid transparent;
+    border-image: linear-gradient(to bottom, #3877EE 0%, #EF5DA8 100%) 1;
+    font-family: 'PT Sans', sans-serif;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.2;
+    padding: 0;
+    
+    p {
+      position: absolute;
+      right: -78px;
+      top: 0;
+      margin: 0;
+      text-align: left;
+      max-width: 100%; 
+      height: 100%;
+    }
+  }
+  
+  .segment-with-buttons-wrapper {
+    position: absolute;
+    left: 400px;
+    display: flex;
+    flex-direction: column;
+    height: 88px;
+  }

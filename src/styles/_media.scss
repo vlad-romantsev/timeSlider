@@ -1,0 +1,179 @@
+@use "./date-title";
+@use "./circle";
+@use "./wrapper";
+@use "./segment";
+@use "./buttons";
+@use "./slider";
+@use "../../src/components/EventSlider/EventSlider.scss";
+@use "./variables.scss" as *;
+@use "./mixins" as *;
+
+@media (max-width: 768px) {
+    .historical-date-title{
+        border-left: none;
+        p{
+            left: 0;
+            font-size: 20px;
+        }
+    }
+    .date-with-buttons-wrapper {
+        width: 123px;
+        padding-left: 20px;
+        padding-top: 59px;
+    }
+    .segment-with-buttons-wrapper{
+        left: 20px;
+        bottom: 50px;
+    }
+    .year-left, .year-right{
+        font-size: 56px;
+    }
+    .circle-years{
+        width: 273px !important;
+        left: 20px !important;
+        top: -340px !important;
+        height: 72px !important;
+    }
+    .axis-y, .horizontal-line, .segment, .circle-line, .custom-nav{
+        display: none;
+    }
+    .time-circle{
+        width: 200px;
+        height: 186px;
+        padding-bottom: 0px;
+    }
+    .time-slider-row{
+        width: 273px;
+        padding-bottom: 0px;
+        min-height: 600px;
+    }
+    .time-slider{
+        margin: 0;
+        width: 400px;
+        height: 100%;
+    }
+    .time-slider-wrapper{
+        max-width: 768px;
+        padding: 0;
+        height: 100%;
+        ::before {
+            width: 0px;
+        }
+    }
+    .event-slider-container{
+        position: absolute;
+        top: 300px;
+        max-width: 166px;
+        max-width: 88%;
+        left: 20px;
+        padding-top: 20px;
+        padding-left: 0px;
+        border-top: 1px solid #C7CDD9;
+    }
+    .time-slider-wrapper::before,
+    .time-slider-wrapper::after {
+        display: none;
+    }
+  .event-slider-container {
+    .event-card {
+      .description {
+        @include description-base;
+        font-size: 14px;
+        margin-top: 12px;
+      }
+    }
+  }
+    .swiper {
+        margin: 0;
+
+    }
+    .swiper-wrapper{
+        max-width: 166px;
+    }
+    
+    .buttons-wrapper {
+    display: none !important;
+  }
+
+  .segment-on-buttons-title {
+    margin-bottom: 11px;
+  }
+
+  .buttons-with-segment {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    gap: 12px;
+  }
+
+  .mobile-nav-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .arrows-block {
+    display: flex;
+    gap: 12px;
+  }
+
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #42567A;
+    border-radius: 50%;
+    background-color: $main-background-color;
+    color: #42567A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &:hover:not(:disabled) {
+      background: #e4e6ec;
+    }
+  }
+
+  .dots-block {
+    display: flex;
+    gap: 6px;
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #C7CDD9;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+
+      &.active {
+        background-color: #42567A;
+      }
+    }
+  }
+    .event-card {
+    transition: opacity 0.3s ease;
+  }
+
+  .inactive-slide {
+    opacity: 0.4;
+  }
+
+  .active-slide {
+    opacity: 1;
+  }
+
+  .swiper-slide {
+    max-width: 90%;
+    height: auto;   
+  }
+}
