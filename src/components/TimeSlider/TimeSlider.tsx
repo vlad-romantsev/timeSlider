@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useReducer } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import EventSlider from "../EventSlider/EventSlider";
 import "./TimeSlider.scss";
 import gsap from "gsap";
@@ -19,12 +19,16 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const [baseAngle, setBaseAngle] = useState(-90 + (360 / segments.length) / 2);
+  const [animatedStartYear, setAnimatedStartYear] = useState(segments[0]?.startYear || 0);
+  const [animatedEndYear, setAnimatedEndYear] = useState(segments[0]?.endYear || 0);
+  const baseAngleRef = useRef({ current: -90 + (360 / segments.length) / 2 });
+  const startYearRef = useRef({ current: segments[0]?.startYear || 0 });
+  const endYearRef = useRef({ current: segments[0]?.endYear || 0 });
 
   const count = segments.length;
   const angleStep = 360 / count;
   const initialBaseAngleDeg = -90 + angleStep / 2;
-  const baseAngleRef = useRef({ current: initialBaseAngleDeg });
   const circleRef = useRef<HTMLDivElement>(null);
 
   const centerX = SLIDER_CENTER.x;
@@ -33,18 +37,64 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
   const radiusY = SLIDER_RADIUS_Y;
 
   const activeSegment = segments[activeIndex];
-  const startYear = segments[activeIndex]?.startYear;
-  const endYear = segments[activeIndex]?.endYear;
 
-  const handleNext = () => {
+  const segmentPositions = useMemo(() => {
+    return segments.map((_, i) => {
+      const angleDeg = baseAngle + i * angleStep;
+      const angleRad = (angleDeg * Math.PI) / 180;
+      return {
+        x: centerX + radiusX * Math.cos(angleRad),
+        y: centerY + radiusY * Math.sin(angleRad)
+      };
+    });
+  }, [segments, baseAngle, angleStep, centerX, centerY, radiusX, radiusY]);
+
+  const handleNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % count);
     setClickedIndex(null);
-  };
+  }, [count]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + count) % count);
     setClickedIndex(null);
-  };
+  }, [count]);
+
+  const handleDotClick = useCallback((index: number) => {
+    setActiveIndex(index);
+    setClickedIndex(null);
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") {
+      setActiveIndex((prev) => (prev + 1) % count);
+      setClickedIndex(null);
+      e.preventDefault();
+    } else if (e.key === "ArrowLeft") {
+      setActiveIndex((prev) => (prev - 1 + count) % count);
+      setClickedIndex(null);
+      e.preventDefault();
+    }
+  }, [count]);
+
+  const animateYears = useCallback((newStartYear: number, newEndYear: number) => {
+    gsap.to(startYearRef.current, {
+      current: newStartYear,
+      duration: 0.8,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        setAnimatedStartYear(Math.round(startYearRef.current.current));
+      },
+    });
+
+    gsap.to(endYearRef.current, {
+      current: newEndYear,
+      duration: 0.8,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        setAnimatedEndYear(Math.round(endYearRef.current.current));
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (circleRef.current) {
@@ -64,13 +114,24 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
       duration: 0.6,
       ease: "power2.inOut",
       onUpdate: () => {
-        forceUpdate();
+        setBaseAngle(baseAngleRef.current.current);
       },
     });
   }, [activeIndex, angleStep, initialBaseAngleDeg]);
 
+  useEffect(() => {
+    const activeSegment = segments[activeIndex];
+    if (activeSegment) {
+      animateYears(activeSegment.startYear, activeSegment.endYear);
+    }
+  }, [activeIndex, segments, animateYears]);
+
   if (segments.length === 0) {
     return <div>No segments provided</div>;
+  }
+  
+  if (segments.length < 2 || segments.length > 6) {
+    return <div>Invalid number of segments. Must be between 2 and 6.</div>;
   }
 
   return (
@@ -94,10 +155,7 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
               length={segments.length}
               onNext={handleNext}
               onPrev={handlePrev}
-              onDotClick={(i) => {
-                setActiveIndex(i);
-                setClickedIndex(null);
-              }}
+              onDotClick={handleDotClick}
             />
           </div>
           <div 
@@ -106,30 +164,16 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
             role="radiogroup"
             aria-label="Выбор временного сегмента"
             tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowRight") {
-                setActiveIndex((prev) => (prev + 1) % count);
-                setClickedIndex(null);
-                e.preventDefault();
-              } else if (e.key === "ArrowLeft") {
-                setActiveIndex((prev) => (prev - 1 + count) % count);
-                setClickedIndex(null);
-                e.preventDefault();
-              }
-            }}
+            onKeyDown={handleKeyDown}
           >
             <div className="circle-line" />
             <div className="circle-years">
-              <span className="year-left">{startYear}</span>
-              <span className="year-right">{endYear}</span>
+              <span className="year-left">{animatedStartYear}</span>
+              <span className="year-right">{animatedEndYear}</span>
             </div>
 
             {segments.map((segment, i) => {
-              const angleDeg = baseAngleRef.current.current + i * angleStep;
-              const angleRad = (angleDeg * Math.PI) / 180;
-
-              const x = centerX + radiusX * Math.cos(angleRad);
-              const y = centerY + radiusY * Math.sin(angleRad);
+              const position = segmentPositions[i];
 
               return (
                 <Segment 
@@ -142,8 +186,8 @@ const TimeSlider: React.FC<TimeSliderProps> = ({
                   setHoveredIndex={setHoveredIndex}
                   clickedIndex={clickedIndex}
                   setClickedIndex={setClickedIndex}
-                  x={x}
-                  y={y}
+                  x={position.x}
+                  y={position.y}
                   sliderId={id}
                 />
               );

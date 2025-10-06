@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { TimeSegment } from "../../types";
 import gsap from "gsap";
 
@@ -55,12 +55,12 @@ const Segment: React.FC<SegmentProps> = ({
         return () => ctx.revert(); 
     }, [isHovered, isActive]);
 
-    const handleMouseEnter = () => setHoveredIndex(index);
-    const handleMouseLeave = () => setHoveredIndex(null);
-    const handleClick = () => {
+    const handleMouseEnter = useCallback(() => setHoveredIndex(index), [setHoveredIndex, index]);
+    const handleMouseLeave = useCallback(() => setHoveredIndex(null), [setHoveredIndex]);
+    const handleClick = useCallback(() => {
         setActiveIndex(index);
         setClickedIndex(isClicked ? null : index);
-    };
+    }, [setActiveIndex, setClickedIndex, index, isClicked]);
 
     const popupPadding = isClicked ? 40 : 0;
 
@@ -123,12 +123,18 @@ const Segment: React.FC<SegmentProps> = ({
     );
 };
 
-export default React.memo(Segment, (prev, next) => 
-    prev.activeIndex === next.activeIndex &&
-    prev.hoveredIndex === next.hoveredIndex &&
-    prev.clickedIndex === next.clickedIndex &&
-    prev.x === next.x &&
-    prev.y === next.y &&
-    prev.segment.id === next.segment.id &&
-    prev.segment.category === next.segment.category
-);
+export default React.memo(Segment, (prev, next) => {
+    return (
+        prev.index === next.index &&
+        prev.activeIndex === next.activeIndex &&
+        prev.hoveredIndex === next.hoveredIndex &&
+        prev.clickedIndex === next.clickedIndex &&
+        prev.x === next.x &&
+        prev.y === next.y &&
+        prev.segment.id === next.segment.id &&
+        prev.segment.category === next.segment.category &&
+        prev.segment.startYear === next.segment.startYear &&
+        prev.segment.endYear === next.segment.endYear &&
+        prev.sliderId === next.sliderId
+    );
+});
